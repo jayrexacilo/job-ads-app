@@ -10,8 +10,8 @@ export default class Header extends Component {
 						<div className="dropdown">
 							<a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Login</a>
 							<div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<a className="dropdown-item" href="#">Employer</a>
-								<a className="dropdown-item" href="#">Applicant</a>
+								<a className="dropdown-item" href="" data-toggle="modal" data-target="#employerLoginModal">Employer</a>
+								<a className="dropdown-item" href="" data-toggle="modal" data-target="#applicantLoginModal">Applicant</a>
 							</div>
 						</div>
 					</div>
