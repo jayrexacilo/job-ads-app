@@ -12,7 +12,11 @@ export default class Jobs extends Component {
                     position: 'Front-end Web Developer',
                     category: 'Programming / Dev',
                     company: 'Company 1',
-                    location: 'Cebu City',
+                    location: {
+                        country: 'Philippines',
+                        city: 'Cebu City',
+                        office: 'IT Park bldg. 123'
+                    },
                     date: timestamp()
                 },
                 {
@@ -20,7 +24,11 @@ export default class Jobs extends Component {
                     position: 'Back-end Web Developer',
                     category: 'Programming / Dev',
                     company: 'Company 2',
-                    location: 'Cebu City',
+                    location: {
+                        country: 'Philippines',
+                        city: 'Cebu City',
+                        office: 'IT Park bldg. 123'
+                    },
                     date: timestamp()
                 },
                 {
@@ -28,7 +36,11 @@ export default class Jobs extends Component {
                     position: 'Graphic Artist',
                     category: 'Design',
                     company: 'Company 3',
-                    location: 'Cebu City',
+                    location: {
+                        country: 'Philippines',
+                        city: 'Cebu City',
+                        office: 'IT Park bldg. 123'
+                    },
                     date: timestamp()
                 }
             ]
@@ -39,7 +51,7 @@ export default class Jobs extends Component {
             return <tr key={job.id}>
                         <th scope="row">{job.position}</th>
                         <td>{job.company}</td>
-                        <td>{job.location}</td>
+                        <td>{job.location.city}, {job.location.country}<span className="d-block text-secondary">{job.location.office}</span></td>
                         <td>{job.date}</td>
                     </tr>
         });
