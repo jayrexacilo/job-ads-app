@@ -33,7 +33,7 @@ export default class Search extends Component {
 		return (
 			<div className="Search">
 				<div className="container">
-					<div className="row">
+					<div className="row align-middle">
 						<form className="form-inline m-4">
 							<div className="form-group">
 								<input type="text" name="search" className="form-control" placeholder="Search" />
@@ -44,6 +44,7 @@ export default class Search extends Component {
 								<input type="submit" className="form-control" value="Go" />
 							</div>
 						</form>
+						<a href="#" className="btn btn-light h-25 my-auto">Post a Job</a>
 					</div>
 				</div>
 			</div>
