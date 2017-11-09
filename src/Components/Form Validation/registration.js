@@ -46,7 +46,7 @@ const validation = {
                                 break;
                             default:
                                 validate.errorMessages.push("Something's wrong, reload the page and try again");
-                                return validate;
+                                return validate.errorMessages;
                                 break;
                         }
                     }
