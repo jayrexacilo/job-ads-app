@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import validation from './Form Validation/registration';
+import axios from 'axios';
 
 export default class Register extends Component {
     constructor() {
@@ -10,31 +11,46 @@ export default class Register extends Component {
             email: '',
             username: '',
             password: '',
-            errors: []
+            validationMessages: [],
+            messageClass: ''
         }
     }
     
     handleRegistration(e) {
+        const { registerType, name, email, username, password, reTypePassword } = e.target;
         const validate = validation.registration(e.target);
         
         if(!validate.length) {
+            const data = JSON.stringify({postType: 'registration', registerType: registerType.value, name: name.value, email: email.value, username: username.value, password: password.value, reTypePassword: reTypePassword.value });
+
             console.log('send request to api');
-            document.getElementById('errorMessages').innerHTML = '';
+            axios.post('http://localhost/job-ads-app/api/', data)
+              .then(function (response) {
+                this.setState({messageClass: 'alert alert-success'});
+                this.setState({validationMessages: ['Successfully Registered!']});
+              }.bind(this))
+              .catch(function (error) {
+                console.log(error);
+              });
+
+            console.log(data);
         } else {
-            this.setState({errors: validate});
+            this.setState({messageClass: 'alert alert-danger'});
+            this.setState({validationMessages: validate});
         }
 
         e.preventDefault();
     }
 
     render() {
-        let errors = this.state.errors.map(error => {
+        let validationMessages = this.state.validationMessages.map(message => {
             return (
-                <div key={error} className="alert alert-danger" role="alert">
-                    {error}
+                <div key={message} className={this.state.messageClass} role="alert">
+                    {message}
                 </div>
             );
         });
+        
         return (
             <div className="Register">
                 <div className="modal fade" id="registerModal" tabIndex="-1" role="dialog" aria-labelledby="register" aria-hidden="true">
@@ -49,8 +65,8 @@ export default class Register extends Component {
                             <div className="modal-body">
                                 <form onSubmit={this.handleRegistration.bind(this)}>
                                     <div className="form-group">
-                                        <div id="errorMessages">
-                                            {errors}
+                                        <div id="validationMessages">
+                                            {validationMessages}
                                         </div>
                                         <label htmlFor="registerType" className="col-form-label" >Register as:</label>
                                         <select className="form-control" name="registerType">
