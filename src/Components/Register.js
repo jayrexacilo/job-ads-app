@@ -95,7 +95,7 @@ export default class Register extends Component {
                             <div className="modal-body">
                                 <form ref={(e) => { this.areaForm = e; }} onSubmit={this.handleRegistration.bind(this)}>
                                     <div className="form-group">
-                                        <div id="validationMessages">
+                                        <div className="validationMessages">
                                             {validationMessages}
                                         </div>
                                         <label htmlFor="registerType" className="col-form-label" >Register as:</label>
