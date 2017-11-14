@@ -1,52 +1,88 @@
 import React, { Component } from 'react';
-import EmployerLogin from './Modals/EmployerLogin';
-import ApplicantLogin from './Modals/ApplicantLogin';
+import axios from 'axios';
+import validation from './FormValidation';
 
 export default class Login extends Component {
     constructor() {
         super();
         this.state = {
-            username: '',
-            password: '',
-            loginType: ''
+            validationMessages: [],
+            messageClass: ''
         };
     }
     handleLogin(e) {
-        const username = e.target.username.value;
-        const password = e.target.password.value;
-        const loginType = e.target.loginType.value;
-        let loginTypeValid = false;
-        
-        switch(loginType) {
-            case 'employer':
-                loginTypeValid = true;
-                break;
-            case 'applicant':
-                loginTypeValid = true;
-                break;
-            default:
-                break;
-        }
-        
-        if(!loginTypeValid) {
-            alert('Something is wrong, please reload and try again.');
-        } else {
-            this.setState({
-                username: username,
-                password: password,
-                loginType: loginType
-            }, function() {
-                // send request to REST API login
-                console.log(this.state);
+        const { username, password, loginType } = e.target;
+        const validate = validation({
+            username: {
+                required: true
+            },
+            password: {
+                required: true
+            }
+        }, e.target);
+
+        if(!validate.length) {
+            axios.post('http://localhost/job-ads-app/api/login.php',{
+                username: username.value,
+                password: password.value
+            })
+            .then(function(response) {
+                if(response.data.error) {
+                    this.setState({messageClass: 'alert alert-danger'});
+                    this.setState({validationMessages: [response.data.error]});
+                } else if(response.data.success) {
+                    this.setState({messageClass: 'alert alert-success'});
+                    this.setState({validationMessages: [response.data.success]});
+                }
+            }.bind(this))
+            .catch(function(response) {
+                console.log(response);
             });
         }
         e.preventDefault();
     }
     render() {
+        let validationMessages = this.state.validationMessages.map(message => {
+            return (
+                <div key={message} className={this.state.messageClass} role="alert">
+                    {message}
+                </div>
+            );
+        });
+
         return (
             <div className="Login">
-                <EmployerLogin onLogin={this.handleLogin.bind(this)} />
-                <ApplicantLogin onLogin={this.handleLogin.bind(this)} />
+                <div className="modal fade" id="loginModal" tabIndex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="loginModal">Login</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <form onSubmit={this.handleLogin.bind(this)}>
+                                    <div className="validationMessages">
+                                        {validationMessages}
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="username" className="col-form-label" >Username:</label>
+                                        <input type="text" className="form-control" id="username" name="username" required />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="password" className="col-form-label">Password:</label>
+                                        <input type="password" className="form-control" id="password" name="password" required />
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <input type="submit" className="btn btn-primary" value="Login" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

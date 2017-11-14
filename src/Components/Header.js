@@ -8,13 +8,8 @@ export default class Header extends Component {
 					<div className="container">
 						<a className="navbar-brand" href="#">IT Jobs</a>
 						<div className="dropdown">
-							<a className="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Login</a>
-							<div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-								<a className="dropdown-item" href="" data-toggle="modal" data-target="#employerLoginModal">Employer</a>
-								<a className="dropdown-item" href="" data-toggle="modal" data-target="#applicantLoginModal">Applicant</a>
-							</div>
-							
-						<a href="#"  style={{fontSize: '13px'}} className="nav-link font-italic p-0 text-center" data-toggle="modal" data-target="#registerModal">Register</a>
+							<a className="nav-link" href="#" role="button" data-toggle="modal" data-target="#loginModal">Login</a>
+							<a href="#"  style={{fontSize: '13px'}} className="nav-link font-italic p-0 text-center" data-toggle="modal" data-target="#registerModal">Register</a>
 						</div>
 					</div>
 				</nav>
