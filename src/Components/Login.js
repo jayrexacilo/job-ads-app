@@ -33,6 +33,7 @@ export default class Login extends Component {
                 } else if(response.data.success) {
                     this.setState({messageClass: 'alert alert-success'});
                     this.setState({validationMessages: [response.data.success]});
+                    this.areaForm.reset();
                 }
             }.bind(this))
             .catch(function(response) {
@@ -62,7 +63,7 @@ export default class Login extends Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <form onSubmit={this.handleLogin.bind(this)}>
+                                <form ref={(e) => { this.areaForm = e; }} onSubmit={this.handleLogin.bind(this)}>
                                     <div className="validationMessages">
                                         {validationMessages}
                                     </div>
