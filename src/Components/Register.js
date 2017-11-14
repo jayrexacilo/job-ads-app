@@ -68,10 +68,6 @@ export default class Register extends Component {
         e.preventDefault();
     }
 
-    resetForm() {
-        this.areaForm.reset();
-    }
-
     render() {
         let validationMessages = this.state.validationMessages.map(message => {
             return (
