@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import validation from './Form Validation/registration';
+import validation from './FormValidation';
 import axios from 'axios';
 
 export default class Register extends Component {
     constructor() {
         super();
-        this.state = { 
-            registerType: '',
-            name: '',
-            email: '',
-            username: '',
-            password: '',
+        this.state = {
             validationMessages: [],
             messageClass: ''
         }
@@ -18,28 +13,63 @@ export default class Register extends Component {
     
     handleRegistration(e) {
         const { registerType, name, email, username, password, reTypePassword } = e.target;
-        const validate = validation.registration(e.target);
+        const validate = validation({
+                            registerType: {
+                                required: true,
+                                type: ['employer', 'applicant']
+                            },
+                            email: {
+                                required: true
+                            },
+                            username: {
+                                required: true,
+                                min: 2,
+                                max: 20
+                            },
+                            password:{ 
+                                required: true,
+                                min: 6,
+                            },
+                            reTypePassword:{ 
+                                required: true,
+                                matches: password.value
+                            },
+                            name:{ 
+                                required: true,
+                                min: 2,
+                                max: 50
+                            }
+                    }, e.target);
         
         if(!validate.length) {
-            const data = JSON.stringify({postType: 'registration', registerType: registerType.value, name: name.value, email: email.value, username: username.value, password: password.value, reTypePassword: reTypePassword.value });
+            const data = JSON.stringify({registerType: registerType.value, name: name.value, email: email.value, username: username.value, password: password.value, reTypePassword: reTypePassword.value });
 
-            console.log('send request to api');
-            axios.post('http://localhost/job-ads-app/api/', data)
+            axios.post('http://localhost/job-ads-app/api/register.php', data)
               .then(function (response) {
-                this.setState({messageClass: 'alert alert-success'});
-                this.setState({validationMessages: ['Successfully Registered!']});
+                if(response.data.error) {
+                    this.setState({messageClass: 'alert alert-danger'});
+                    this.setState({validationMessages: response.data.error});
+                } else {
+                    this.setState({messageClass: 'alert alert-success'});
+                    this.setState({validationMessages: ['Successfully Registered!']});
+                    this.areaForm.reset();
+                }
               }.bind(this))
               .catch(function (error) {
                 console.log(error);
+                this.setState({messageClass: 'alert alert-danger'});
+                this.setState({validationMessages: [error]});
               });
-
-            console.log(data);
         } else {
             this.setState({messageClass: 'alert alert-danger'});
             this.setState({validationMessages: validate});
         }
 
         e.preventDefault();
+    }
+
+    resetForm() {
+        this.areaForm.reset();
     }
 
     render() {
@@ -63,7 +93,7 @@ export default class Register extends Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <form onSubmit={this.handleRegistration.bind(this)}>
+                                <form ref={(e) => { this.areaForm = e; }} onSubmit={this.handleRegistration.bind(this)}>
                                     <div className="form-group">
                                         <div id="validationMessages">
                                             {validationMessages}
